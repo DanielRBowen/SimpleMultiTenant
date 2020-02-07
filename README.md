@@ -11,5 +11,5 @@ and from [SaasKit](https://github.com/saaskit/saaskit/tree/dev)
 git clone --single-branch --branch dev https://github.com/saaskit/saaskit.git
 ```
 
-Trying for the tenant identifier to be the subdomain. And trying for easy debugging using localdb instead of an azure database in a elastic pool.
+Trying for the tenant identifier to be the subdomain. And trying for easy debugging using localdb instead of an azure database in an elastic pool.
 A nice addition would be to be able to dynamically create new tenants from an administrative site and change content and themes per tenant.
