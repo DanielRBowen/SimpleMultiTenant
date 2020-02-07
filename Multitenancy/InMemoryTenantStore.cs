@@ -22,7 +22,7 @@ namespace Multitenancy
 
             var inMemoryTenants = new[]
             {
-                //new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f3", Identifier = "localhost" },
+                new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f3", Identifier = "localhost" },
                 new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f2", Identifier = "t01" },
                 new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f1", Identifier = "t02" }
             };
@@ -36,6 +36,11 @@ namespace Multitenancy
             else
             {
                 tenant = inMemoryTenants.SingleOrDefault(t => t.Identifier == identifier);
+            }
+
+            if (tenant == null)
+            {
+                return inMemoryTenants.FirstOrDefault();
             }
 
             return await Task.FromResult(tenant);

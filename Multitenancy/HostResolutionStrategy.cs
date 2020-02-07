@@ -24,15 +24,12 @@ namespace Multitenancy
         {
             if (_httpContextAccessor.HttpContext == null)
             {
-                return null;
+                return "localhost";
             }
             else
             {
-                var routeValues = _httpContextAccessor.HttpContext.Request.RouteValues;
-                var path = _httpContextAccessor.HttpContext.Request.Path;
-                var host = _httpContextAccessor.HttpContext.Request.Host;
-                var hostHost = _httpContextAccessor.HttpContext.Request.Host.Host;
-                return await Task.FromResult(path);
+                //return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
+                return await Task.FromResult(GetSubDomain(_httpContextAccessor.HttpContext));
             }
         }
 
