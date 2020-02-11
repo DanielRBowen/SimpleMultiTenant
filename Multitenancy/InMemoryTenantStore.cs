@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Multitenancy
@@ -8,6 +10,11 @@ namespace Multitenancy
     /// </summary>
     public class InMemoryTenantStore : ITenantStore<Tenant>
     {
+        private readonly List<Tenant> _tenants;
+        public InMemoryTenantStore(IEnumerable<Tenant> tenants)
+        {
+            _tenants = tenants.ToList();
+        }
         /// <summary>
         /// Get a tenant for a given identifier
         /// </summary>
@@ -20,27 +27,22 @@ namespace Multitenancy
                 return null;
             }
 
-            var inMemoryTenants = new[]
-            {
-                new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f3", Name = "localhost" },
-                new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f2", Name = "t01" },
-                new Tenant{ Id = "80fdb3c0-5888-4295-bf40-ebee0e3cd8f1", Name = "t02" }
-            };
+            var identifierLower = identifier.ToLowerInvariant();
 
             Tenant tenant = null;
 
             if (isPath == true)
             {
-                tenant = inMemoryTenants.SingleOrDefault(t => identifier.Contains(t.Name));
+                tenant = _tenants.SingleOrDefault(tenant => identifierLower.Contains(tenant.Name.ToLowerInvariant()));
             }
             else
             {
-                tenant = inMemoryTenants.SingleOrDefault(t => t.Name == identifier);
+                tenant = _tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == identifierLower);
             }
 
             if (tenant == null)
             {
-                return inMemoryTenants.FirstOrDefault();
+                return _tenants.FirstOrDefault();
             }
 
             return await Task.FromResult(tenant);

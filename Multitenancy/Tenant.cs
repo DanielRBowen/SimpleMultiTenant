@@ -12,17 +12,14 @@ namespace Multitenancy
         /// The tenant Id
         /// </summary>
         [Key]
-        public byte[] Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The tenant identifier
         /// </summary>
         public string Name { get; set; }
 
-        public string ServicePlan { get; set; }
-        public string RecoveryState { get; set; }
-        public System.DateTime LastUpdated { get; set; }
-
+        public string ConnectionString { get; set; }
         /// <summary>
         /// Tenant items
         /// </summary>

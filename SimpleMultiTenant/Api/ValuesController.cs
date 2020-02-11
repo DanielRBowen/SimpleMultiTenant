@@ -18,7 +18,7 @@ namespace SimpleMultiTenant.Api
         }
     }
 
-    [Route("/api/{tenant}/values")]
+    [Route("/api/{tenant?}/values")]
     public class ValuesController : Controller
     {
         private readonly OperationIdService _operationIdService;

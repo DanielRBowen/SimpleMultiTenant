@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using SimpleMultiTenant.Data.Entities;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Reflection;
 
 namespace SimpleMultiTenant.Data
 {
@@ -16,6 +19,41 @@ namespace SimpleMultiTenant.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        /// <summary>
+        /// https://stackoverflow.com/questions/48117961/the-instance-of-entity-type-cannot-be-tracked-because-another-instance-of-th
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public override EntityEntry<TEntity> Update<TEntity>(TEntity entity) where TEntity : class
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            var type = entity.GetType();
+            var et = this.Model.FindEntityType(type);
+            var key = et.FindPrimaryKey();
+
+            var keys = new object[key.Properties.Count];
+            var x = 0;
+            foreach (var keyName in key.Properties)
+            {
+                var keyProperty = type.GetProperty(keyName.Name, BindingFlags.Public | BindingFlags.Instance);
+                keys[x++] = keyProperty.GetValue(entity);
+            }
+
+            var originalEntity = Find(type, keys);
+            if (Entry(originalEntity).State == EntityState.Modified)
+            {
+                return base.Update(entity);
+            }
+
+            Entry(originalEntity).CurrentValues.SetValues(entity);
+            return Entry((TEntity)originalEntity);
         }
 
         /// <summary>
@@ -36,7 +74,7 @@ namespace SimpleMultiTenant.Data
                     .Build();
 
                 var builder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                var connectionString = configuration.GetConnectionString("Tenant1");
                 builder.UseSqlServer(connectionString);
                 return new ApplicationDbContext(builder.Options);
             }

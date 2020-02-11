@@ -12,14 +12,15 @@ using SimpleMultiTenant.Data.Entities;
 
 namespace SimpleMultiTenant.Controllers
 {
+    //[Route("/[Controller]/[Action]/{tenant?}")]
     public class GoodsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GoodsController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public GoodsController(ApplicationDbContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
+            _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -27,8 +28,8 @@ namespace SimpleMultiTenant.Controllers
         public async Task<IActionResult> Index()
         {
             var tenant = _httpContextAccessor.HttpContext.GetTenant();
-            var endpoint = _httpContextAccessor.HttpContext.GetEndpoint();
-            return View(await _context.Goods.ToListAsync());
+            var dbConnectionString =_dbContext.Database.GetDbConnection().ConnectionString;
+            return View(await _dbContext.Goods.ToListAsync());
         }
 
         // GET: Goods/Details/5
@@ -39,7 +40,7 @@ namespace SimpleMultiTenant.Controllers
                 return NotFound();
             }
 
-            var good = await _context.Goods
+            var good = await _dbContext.Goods
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (good == null)
             {
@@ -64,8 +65,8 @@ namespace SimpleMultiTenant.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(good);
-                await _context.SaveChangesAsync();
+                _dbContext.Add(good);
+                await _dbContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(good);
@@ -79,7 +80,7 @@ namespace SimpleMultiTenant.Controllers
                 return NotFound();
             }
 
-            var good = await _context.Goods.FindAsync(id);
+            var good = await _dbContext.Goods.FindAsync(id);
             if (good == null)
             {
                 return NotFound();
@@ -103,8 +104,8 @@ namespace SimpleMultiTenant.Controllers
             {
                 try
                 {
-                    _context.Update(good);
-                    await _context.SaveChangesAsync();
+                    _dbContext.Update(good);
+                    await _dbContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -130,7 +131,7 @@ namespace SimpleMultiTenant.Controllers
                 return NotFound();
             }
 
-            var good = await _context.Goods
+            var good = await _dbContext.Goods
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (good == null)
             {
@@ -145,15 +146,15 @@ namespace SimpleMultiTenant.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var good = await _context.Goods.FindAsync(id);
-            _context.Goods.Remove(good);
-            await _context.SaveChangesAsync();
+            var good = await _dbContext.Goods.FindAsync(id);
+            _dbContext.Goods.Remove(good);
+            await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool GoodExists(int id)
         {
-            return _context.Goods.Any(e => e.Id == id);
+            return _dbContext.Goods.Any(e => e.Id == id);
         }
     }
 }

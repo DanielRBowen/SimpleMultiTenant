@@ -12,6 +12,7 @@ using SimpleMultiTenant.Models;
 
 namespace SimpleMultiTenant.Controllers
 {
+    //[Route("/[controller]/[Action]/{tenant?}")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

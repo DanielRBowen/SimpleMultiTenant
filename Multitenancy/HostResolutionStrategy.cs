@@ -28,8 +28,8 @@ namespace Multitenancy
             }
             else
             {
-                //return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
-                return await Task.FromResult(GetSubDomain(_httpContextAccessor.HttpContext));
+                return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
+                //return await Task.FromResult(GetSubDomain(_httpContextAccessor.HttpContext));
             }
         }
 

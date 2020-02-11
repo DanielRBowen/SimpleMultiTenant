@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multitenancy", "Multitenanc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMultiTenant.Data", "SimpleMultiTenant.Data\SimpleMultiTenant.Data.csproj", "{3CF3FC47-E08D-4341-9542-922D56988F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multitenancy.Data", "Multitenancy.Data\Multitenancy.Data.csproj", "{2C6D434D-51C5-4AC4-A837-4D93B04A94EC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2C6D434D-51C5-4AC4-A837-4D93B04A94EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C6D434D-51C5-4AC4-A837-4D93B04A94EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C6D434D-51C5-4AC4-A837-4D93B04A94EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C6D434D-51C5-4AC4-A837-4D93B04A94EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
