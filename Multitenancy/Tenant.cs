@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Multitenancy
 {
@@ -10,16 +11,21 @@ namespace Multitenancy
         /// <summary>
         /// The tenant Id
         /// </summary>
-        public string Id { get; set; }
+        [Key]
+        public byte[] Id { get; set; }
 
         /// <summary>
         /// The tenant identifier
         /// </summary>
-        public string Identifier { get; set; }
+        public string Name { get; set; }
+
+        public string ServicePlan { get; set; }
+        public string RecoveryState { get; set; }
+        public System.DateTime LastUpdated { get; set; }
 
         /// <summary>
         /// Tenant items
         /// </summary>
-        public Dictionary<string, object> Items { get; private set; } = new Dictionary<string, object>();
+        //public Dictionary<string, object> Items { get; private set; } = new Dictionary<string, object>();
     }
 }

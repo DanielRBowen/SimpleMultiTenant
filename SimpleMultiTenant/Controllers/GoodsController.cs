@@ -2,26 +2,32 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Multitenancy;
 using SimpleMultiTenant.Data;
-using SimpleMultiTenant.Data.TenantEntities;
+using SimpleMultiTenant.Data.Entities;
 
 namespace SimpleMultiTenant.Controllers
 {
     public class GoodsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public GoodsController(ApplicationDbContext context)
+        public GoodsController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         // GET: Goods
         public async Task<IActionResult> Index()
         {
+            var tenant = _httpContextAccessor.HttpContext.GetTenant();
+            var endpoint = _httpContextAccessor.HttpContext.GetEndpoint();
             return View(await _context.Goods.ToListAsync());
         }
 

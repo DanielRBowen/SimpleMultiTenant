@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using SimpleMultiTenant.Data.TenantEntities;
+using SimpleMultiTenant.Data.Entities;
 
 namespace SimpleMultiTenant.Data
 {
