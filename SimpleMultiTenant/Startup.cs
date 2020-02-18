@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Multitenancy;
 using SimpleMultiTenant.Api;
 using Autofac;
+using SimpleMultiTenant.Services;
 
 namespace SimpleMultiTenant
 {
@@ -72,6 +73,11 @@ namespace SimpleMultiTenant
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             var options = optionsBuilder.UseSqlServer(Configuration.GetConnectionString(tenant.Name)).Options;
             containerBuilder.RegisterInstance(new ApplicationDbContext(options)).SingleInstance();
+
+            containerBuilder.RegisterType<SettingsService>()
+               .AsSelf()
+               .As<ISettingsService>()
+               .InstancePerLifetimeScope();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
