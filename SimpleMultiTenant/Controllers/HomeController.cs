@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Multitenancy;
 using SimpleMultiTenant.Data;
 using SimpleMultiTenant.Models;
+using SimpleMultiTenant.Services;
 
 namespace SimpleMultiTenant.Controllers
 {
@@ -18,12 +19,14 @@ namespace SimpleMultiTenant.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISettingsService _settingsService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDbContext, IHttpContextAccessor httpContextAccessor)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext applicationDbContext, IHttpContextAccessor httpContextAccessor, ISettingsService settingsService)
         {
             _logger = logger;
             _applicationDbContext = applicationDbContext;
             _httpContextAccessor = httpContextAccessor;
+            _settingsService = settingsService;
         }
 
         public IActionResult Index()
