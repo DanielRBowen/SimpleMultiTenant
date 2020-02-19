@@ -72,7 +72,11 @@ namespace SimpleMultiTenant
             containerBuilder.RegisterInstance(new OperationIdService()).SingleInstance();
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             var options = optionsBuilder.UseSqlServer(tenant.ConnectionString).Options;
-            containerBuilder.RegisterInstance(new ApplicationDbContext(options)).SingleInstance();
+
+            //containerBuilder.RegisterInstance(new ApplicationDbContext(options)).AsSelf().SingleInstance();
+            containerBuilder.RegisterType<ApplicationDbContext>()
+                .WithParameter("options", options)
+                .InstancePerLifetimeScope();
 
             containerBuilder.RegisterType<SettingsService>()
                .AsSelf()
