@@ -24,7 +24,7 @@ namespace SimpleMultiTenant
 
         public static IConfiguration Configuration { get; set; }
 
-        public static List<Tenant> InMemoryTenants { get; set; } = new List<Tenant>();
+        private static readonly List<Tenant> s_InMemoryTenants = new List<Tenant>();
 
         public Startup(IConfiguration configuration)
         {
@@ -33,6 +33,22 @@ namespace SimpleMultiTenant
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+        {
+            LoadTenants();
+
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            services.AddSingleton<IEnumerable<Tenant>>(tenants => s_InMemoryTenants);
+            services.AddMultiTenancy()
+              .WithResolutionStrategy<HostResolutionStrategy>()
+              .WithStore<InMemoryTenantStore>();
+        }
+
+        private void LoadTenants()
         {
             var connectionStrings = Configuration.GetSection("ConnectionStrings").GetChildren().ToDictionary(pair => pair.Key, pair => pair.Value);
 
@@ -47,23 +63,12 @@ namespace SimpleMultiTenant
                     ConnectionString = connectionStringValue
                 };
 
-                InMemoryTenants.Add(tenant);
+                s_InMemoryTenants.Add(tenant);
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                var options = optionsBuilder.UseSqlServer(connectionStringValue).Options; 
+                var options = optionsBuilder.UseSqlServer(connectionStringValue).Options;
                 var dbContext = new ApplicationDbContext(options);
                 dbContext.Database.Migrate();
             }
-
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddControllersWithViews();
-            services.AddRazorPages();
-
-            services.AddSingleton<IEnumerable<Tenant>>(tenants => InMemoryTenants);
-            services.AddMultiTenancy()
-              .WithResolutionStrategy<HostResolutionStrategy>()
-              .WithStore<InMemoryTenantStore>();
         }
 
         public static void ConfigureMultiTenantServices(Tenant tenant, ContainerBuilder containerBuilder)
