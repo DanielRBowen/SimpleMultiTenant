@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Multitenancy;
 using SimpleMultiTenant.Data;
 using SimpleMultiTenant.Data.Entities;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SimpleMultiTenant.Controllers
 {
@@ -28,7 +25,7 @@ namespace SimpleMultiTenant.Controllers
         public async Task<IActionResult> Index()
         {
             var tenant = _httpContextAccessor.HttpContext.GetTenant();
-            var dbConnectionString =_dbContext.Database.GetDbConnection().ConnectionString;
+            var dbConnectionString = _dbContext.Database.GetDbConnection().ConnectionString;
             return View(await _dbContext.Goods.ToListAsync());
         }
 

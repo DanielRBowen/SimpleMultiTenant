@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Multitenancy;
 using SimpleMultiTenant.Data;
 using SimpleMultiTenant.Models;
 using SimpleMultiTenant.Services;
+using System.Diagnostics;
 
 namespace SimpleMultiTenant.Controllers
 {

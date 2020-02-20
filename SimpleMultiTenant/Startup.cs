@@ -68,17 +68,16 @@ namespace SimpleMultiTenant
                 var options = optionsBuilder.UseSqlServer(connectionStringValue).Options;
                 var dbContext = new ApplicationDbContext(options);
                 dbContext.Database.Migrate();
+                // Try to seed each database here.
             }
         }
 
         public static void ConfigureMultiTenantServices(Tenant tenant, ContainerBuilder containerBuilder)
         {
-            //c.Register...
             containerBuilder.RegisterInstance(new OperationIdService()).SingleInstance();
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             var options = optionsBuilder.UseSqlServer(tenant.ConnectionString).Options;
 
-            //containerBuilder.RegisterInstance(new ApplicationDbContext(options)).AsSelf().SingleInstance();
             containerBuilder.RegisterType<ApplicationDbContext>()
                 .WithParameter("options", options)
                 .InstancePerLifetimeScope();
