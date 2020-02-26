@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Multitenancy
@@ -28,21 +26,33 @@ namespace Multitenancy
         /// <returns></returns>
         public async Task<Tenant> GetTenantAsync(string identifier)
         {
-            var identifierLower = identifier.ToLowerInvariant();
             Tenant tenant = null;
-            tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => identifierLower.Contains(tenant.Name.ToLowerInvariant()));
 
-            if (tenant == null)
+            if (string.IsNullOrWhiteSpace(identifier))
             {
-                tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == _multitenantConfiguration.DefaultTenant.ToLowerInvariant());
+                tenant = GetDefaultTenant();
+            }
+            else
+            {
+                tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == identifier.ToLowerInvariant());
             }
 
             if (tenant == null)
             {
-                throw new NullReferenceException($"The path: {identifierLower}, does not contain any of the tenant ids.");
+                tenant = GetDefaultTenant();
+            }
+
+            if (tenant == null)
+            {
+                throw new NullReferenceException($"The path: {identifier}, does not contain any of the tenant ids.");
             }
 
             return await Task.FromResult(tenant);
+        }
+
+        private Tenant GetDefaultTenant()
+        {
+            return _multitenantConfiguration.Tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == _multitenantConfiguration.DefaultTenant.ToLowerInvariant());
         }
     }
 }

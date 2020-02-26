@@ -24,11 +24,20 @@ namespace Multitenancy
         {
             if (_httpContextAccessor.HttpContext == null)
             {
-                return string.Empty;
+                return await Task.FromResult(string.Empty);
             }
             else
             {
-                return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
+                var path = await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
+
+                if (path.HasValue)
+                {
+                    return await Task.FromResult(path.Value.Split('/')[1]);
+                }
+                else
+                {
+                    return await Task.FromResult(string.Empty);
+                }
             }
         }
     }
