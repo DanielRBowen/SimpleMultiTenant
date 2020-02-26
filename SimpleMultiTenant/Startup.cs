@@ -24,8 +24,6 @@ namespace SimpleMultiTenant
 
         public static IConfiguration Configuration { get; set; }
 
-        private static readonly List<Tenant> s_InMemoryTenants = new List<Tenant>();
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -34,7 +32,7 @@ namespace SimpleMultiTenant
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            LoadTenants();
+            LoadTenants(services);
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -42,15 +40,15 @@ namespace SimpleMultiTenant
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddSingleton<IEnumerable<Tenant>>(tenants => s_InMemoryTenants);
             services.AddMultiTenancy()
               .WithResolutionStrategy<HostResolutionStrategy>()
               .WithStore<InMemoryTenantStore>();
         }
 
-        private void LoadTenants()
+        private void LoadTenants(IServiceCollection services)
         {
             var connectionStrings = Configuration.GetSection("ConnectionStrings").GetChildren().ToDictionary(pair => pair.Key, pair => pair.Value);
+            var tenants = new List<Tenant>();
 
             foreach (var connectionString in connectionStrings)
             {
@@ -63,13 +61,23 @@ namespace SimpleMultiTenant
                     ConnectionString = connectionStringValue
                 };
 
-                s_InMemoryTenants.Add(tenant);
+                tenants.Add(tenant);
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 var options = optionsBuilder.UseSqlServer(connectionStringValue).Options;
                 var dbContext = new ApplicationDbContext(options);
                 dbContext.Database.Migrate();
                 // Try to seed each database here.
             }
+
+            var defaultTenantName = Configuration["DefaultTenant"];
+
+            var multitenantConfiguration = new MultitenantConfiguration
+            {
+                DefaultTenant = defaultTenantName,
+                Tenants = tenants
+            };
+
+            services.AddSingleton(configuration => multitenantConfiguration);
         }
 
         public static void ConfigureMultiTenantServices(Tenant tenant, ContainerBuilder containerBuilder)
@@ -116,7 +124,7 @@ namespace SimpleMultiTenant
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{tenant?}/{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{tenant}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
             });

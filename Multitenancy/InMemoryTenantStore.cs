@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,39 +11,35 @@ namespace Multitenancy
     /// </summary>
     public class InMemoryTenantStore : ITenantStore<Tenant>
     {
-        private readonly List<Tenant> _tenants;
-        public InMemoryTenantStore(IEnumerable<Tenant> tenants)
+        private readonly MultitenantConfiguration _multitenantConfiguration;
+        public InMemoryTenantStore(MultitenantConfiguration multitenantConfiguration)
         {
-            _tenants = tenants.ToList();
+            _multitenantConfiguration = multitenantConfiguration;
+
+            if (multitenantConfiguration?.Tenants == null || multitenantConfiguration.Tenants.Any() == false)
+            {
+                throw new NullReferenceException("There are no tenants in the multitenant configuration.");
+            }
         }
         /// <summary>
         /// Get a tenant for a given identifier
         /// </summary>
         /// <param name="identifier"></param>
         /// <returns></returns>
-        public async Task<Tenant> GetTenantAsync(string identifier, bool isPath = false)
+        public async Task<Tenant> GetTenantAsync(string identifier)
         {
-            if (string.IsNullOrWhiteSpace(identifier))
-            {
-                return null;
-            }
-
             var identifierLower = identifier.ToLowerInvariant();
-
             Tenant tenant = null;
+            tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => identifierLower.Contains(tenant.Name.ToLowerInvariant()));
 
-            if (isPath == true)
+            if (tenant == null)
             {
-                tenant = _tenants.SingleOrDefault(tenant => identifierLower.Contains(tenant.Name.ToLowerInvariant()));
-            }
-            else
-            {
-                tenant = _tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == identifierLower);
+                tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == _multitenantConfiguration.DefaultTenant.ToLowerInvariant());
             }
 
             if (tenant == null)
             {
-                return _tenants.FirstOrDefault();
+                throw new NullReferenceException($"The path: {identifierLower}, does not contain any of the tenant ids.");
             }
 
             return await Task.FromResult(tenant);

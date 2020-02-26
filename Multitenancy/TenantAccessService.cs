@@ -24,7 +24,7 @@ namespace Multitenancy
         public async Task<T> GetTenantAsync()
         {
             var tenantIdentifier = await _tenantResolutionStrategy.GetTenantIdentifierAsync();
-            return await _tenantStore.GetTenantAsync(tenantIdentifier, true);
+            return await _tenantStore.GetTenantAsync(tenantIdentifier);
         }
     }
 }

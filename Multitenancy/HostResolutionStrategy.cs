@@ -24,32 +24,12 @@ namespace Multitenancy
         {
             if (_httpContextAccessor.HttpContext == null)
             {
-                return "localhost";
+                return string.Empty;
             }
             else
             {
                 return await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
-                //return await Task.FromResult(GetSubDomain(_httpContextAccessor.HttpContext));
             }
-        }
-
-        /// <summary>
-        /// https://stackoverflow.com/questions/38549143/how-do-i-get-the-current-subdomain-within-net-core-middleware
-        /// </summary>
-        /// <param name="httpContext"></param>
-        /// <returns></returns>
-        private static string GetSubDomain(HttpContext httpContext)
-        {
-            var subDomain = string.Empty;
-
-            var host = httpContext.Request.Host.Host;
-
-            if (!string.IsNullOrWhiteSpace(host))
-            {
-                subDomain = host.Split('.')[0];
-            }
-
-            return subDomain.Trim().ToLower();
         }
     }
 }
