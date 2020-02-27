@@ -78,6 +78,7 @@ namespace SimpleMultiTenant
             };
 
             services.AddSingleton(configuration => multitenantConfiguration);
+            services.AddDistributedMemoryCache();
         }
 
         public static void ConfigureMultiTenantServices(Tenant tenant, ContainerBuilder containerBuilder)

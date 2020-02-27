@@ -1,10 +1,20 @@
 ﻿@using Multitenancy
-@model Tenant
+@using SimpleMultiTenant.Controllers
+@model HomeIndexViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h2>@Model.Name</h2>
-    <a asp-controller="Goods" asp-action="Index" asp-route-tenant="@Model.Name">Goods</a>
+    <h2>@Model.Tenant.Name</h2>
+    <a asp-controller="Goods" asp-action="Index" asp-route-tenant="@Model.Tenant.Name">Goods</a>
+
+    @if (Model.Junk != null)
+    {
+        <div class="my-3">
+            <h3>Your junk:</h3>
+            <div>@Model.Junk.Name</div>
+            <div>@Model.Junk.Description</div>
+        </div>
+    }
 </div>
