@@ -31,6 +31,8 @@ So you have to remove the AddDefaultUI from AddIdentityCore in Configure service
 
 In my production project I changed the scaffolded Identity UI Pages into a MVC version. The login and register doesn't work. I am guessing because of the cookes for each tenant needs to be configured.
 
+If you get an ANCM Multiple In-Process Applications in same Process Error when using different tenant than the default tenant then delete the .vs folder in the folder near your sln file like it says [here](https://stackoverflow.com/questions/58246822/http-error-500-35-ancm-multiple-in-process-applications-in-same-process-asp-ne)
+
 ## Other dated ways to do Multitenancy
 (1)
 From Azure [multitenant example](https://docs.microsoft.com/en-us/azure/sql-database/saas-dbpertenant-wingtip-app-overview#sql-database-wingtip-saas-tutorials]):
