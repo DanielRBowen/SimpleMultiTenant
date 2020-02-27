@@ -4,7 +4,7 @@ A simple multi-tenant app with starting code from: [Michael Mckenna's blog](http
 ## The Simple most recent way to do Multitenancy:
 The tenant is resolved by the first path route parameter.
 ```
-HttpContext.Request.Path.Value.Split('/');
+HttpContext.Request.Path.Value.Split('/')[1];
 ```
 
 So the tenant is Mapped in startup like this:
