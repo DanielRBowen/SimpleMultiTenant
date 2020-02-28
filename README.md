@@ -27,7 +27,15 @@ On Controllers which have an [ApiController] attribute it will also need a route
 
 You have to change the scaffolded Identity UI to get Identity to work with each tenant. Like suggested in the top answer [here](https://stackoverflow.com/questions/50682108/change-routing-in-asp-net-core-identity-ui)
 
-So you have to remove the AddDefaultUI from AddIdentityCore in Configure service like this answer [here](https://stackoverflow.com/questions/51138449/no-accountcontroller-for-asp-net-core-2-1)
+Instead of adding AddDefaultIdentity(), the AddIdentity() should be added in Configure services.
+
+AddIdentity Example:
+```
+ services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddSignInManager()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+```
 
 In my production project I changed the scaffolded Identity UI Pages into a MVC version. The login and register doesn't work. I am guessing because of the cookes for each tenant needs to be configured.
 
