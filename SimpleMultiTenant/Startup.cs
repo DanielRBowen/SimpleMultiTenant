@@ -16,6 +16,9 @@ using Multitenancy;
 using SimpleMultiTenant.Api;
 using Autofac;
 using SimpleMultiTenant.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using SimpleMultiTenant.Security;
 
 namespace SimpleMultiTenant
 {
@@ -36,6 +39,30 @@ namespace SimpleMultiTenant
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.ReturnUrlParameter = "/";
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToAccessDenied = context =>
+                    {
+                        var tenantName = context.HttpContext.GetTenant().Name;
+                        context.Response.Redirect(new PathString($"/{tenantName}/Account/Login"));
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(PolicyNames.RequireTenant,
+                    policy =>
+                    {
+                        policy.AddRequirements(new InCurrentTenantRequirement(new HttpContextAccessor()));
+                        policy.RequireAuthenticatedUser();
+                    });
+            });
 
             services.AddControllersWithViews();
             services.AddRazorPages();

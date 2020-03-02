@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Multitenancy;
+using SimpleMultiTenant.Attributes;
 using SimpleMultiTenant.Data;
 using SimpleMultiTenant.Data.Entities;
 using System.Linq;
@@ -9,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace SimpleMultiTenant.Controllers
 {
-    //[Route("/[Controller]/[Action]/{tenant?}")]
+    //[Authorize(Policy = PolicyNames.RequireTenant, Roles = "admin")]
+    [IsUserInCurrentTenant]
     public class GoodsController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
