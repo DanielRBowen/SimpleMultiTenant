@@ -18,9 +18,9 @@ namespace SimpleMultiTenant.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, InCurrentTenantRequirement requirement)
         {
-            var tenantName = _httpContextAccessor.HttpContext.GetTenant().Name;
+            var tenandId = _httpContextAccessor.HttpContext.GetTenant().Id;
 
-            if (context.User.FindFirstValue("tid") == tenantName)
+            if (context.User.FindFirstValue("tid") == tenandId)
             {
                 context.Succeed(requirement);
             }
