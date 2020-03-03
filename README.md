@@ -41,6 +41,26 @@ If you get an ANCM Multiple In-Process Applications in same Process Error when u
 
 [This](https://docs.microsoft.com/en-us/azure/architecture/multitenant-identity/) explains how to do identity in multitenant applications.
 
+The application will need to only have the authorize user see his tenant's site. A claim can be added while logging on and that claim can be checked on controllers and methods with a ActionFilterAttribute or be checked with an authorize policy. [This](https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/) is how you can add a tenant id to the claims on the login process. [Here](https://github.com/DanielRBowen/SimpleMultiTenant/blob/master/SimpleMultiTenant/Attributes/IsUserInCurrentTenantAttribute.cs) is the ActionFilterAttribute to use on controllers without authorize attributes. And [this](https://github.com/DanielRBowen/SimpleMultiTenant/blob/master/SimpleMultiTenant/Security/InCurrentTenantRequirement.cs) is the Authorize requirement.
+
+This is how to configure application cookie to redirect to login when access is denied:
+
+```
+  services.ConfigureApplicationCookie(options =>
+            {
+                options.ReturnUrlParameter = "/";
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToAccessDenied = context =>
+                    {
+                        var tenantName = context.HttpContext.GetTenant().Name;
+                        context.Response.Redirect(new PathString($"/{tenantName}/Account/Login"));
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+```
+
 ## Other dated ways to do Multitenancy
 (1)
 From Azure [multitenant example](https://docs.microsoft.com/en-us/azure/sql-database/saas-dbpertenant-wingtip-app-overview#sql-database-wingtip-saas-tutorials]):
