@@ -1,7 +1,7 @@
 # SimpleMultiTenant
 A simple multi-tenant app with starting code from the first part of: [Michael Mckenna's blog](https://michael-mckenna.com/multi-tenant-asp-dot-net-core-application-tenant-resolution/) His Github is [here](https://github.com/myquay)
 
-## The Simple most recent way to do Multitenancy:
+## A simple way to do Multitenancy:
 The tenant is resolved by the first path route parameter.
 ```
 HttpContext.Request.Path.Value.Split('/')[1];
@@ -92,7 +92,7 @@ For the DbContext constructor add the connection string:
         }
 ```
 
-## Other dated ways to do Multitenancy
+## Other Multitenancy examples
 (1)
 From Azure [multitenant example](https://docs.microsoft.com/en-us/azure/sql-database/saas-dbpertenant-wingtip-app-overview#sql-database-wingtip-saas-tutorials]):
 ```
