@@ -1,5 +1,5 @@
 # SimpleMultiTenant
-A simple multi-tenant app with starting code from: [Michael Mckenna's blog](https://michael-mckenna.com/multi-tenant-asp-dot-net-core-application-tenant-resolution/) His Github is [here](https://github.com/myquay)
+A simple multi-tenant app with starting code from the first part of: [Michael Mckenna's blog](https://michael-mckenna.com/multi-tenant-asp-dot-net-core-application-tenant-resolution/) His Github is [here](https://github.com/myquay)
 
 ## The Simple most recent way to do Multitenancy:
 The tenant is resolved by the first path route parameter.
@@ -59,6 +59,37 @@ This is how to configure application cookie to redirect to login when access is 
                     }
                 };
             });
+```
+
+This implementation add the tenantsDbContext and also add the applicationDbContext in ConfigureServices for dependency injection:
+ ```
+ services.AddDbContext<TenantsDbContext>(options =>
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("TenantsSimple")));
+
+            services.AddScoped<ApplicationDbContext>();
+ ```
+
+For the DbContext constructor add the connection string:
+```
+ public ApplicationDbContext(IHttpContextAccessor httpContextAccessor, TenantsDbContext tenantsDbContext)
+           : base(CreateDbContextOptions(httpContextAccessor, tenantsDbContext))
+        {
+        }
+
+        private static DbContextOptions CreateDbContextOptions(IHttpContextAccessor httpContextAccessor, TenantsDbContext tenantsDbContext)
+        {
+            var tenantName = httpContextAccessor.HttpContext.GetTenant().Name;
+            var connectionString = tenantsDbContext.Tenants.SingleOrDefault(tenant => tenant.Name == tenantName).ConnectionString;
+
+            if (connectionString == null)
+            {
+                throw new NullReferenceException($"The connection string was null for the tenant: {tenantName}");
+            }
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            return optionsBuilder.UseSqlServer(connectionString).Options;
+        }
 ```
 
 ## Other dated ways to do Multitenancy
