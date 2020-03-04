@@ -25,7 +25,7 @@ On Controllers which have an [ApiController] attribute it will also need a route
 [Route("{tenant}/[controller]")]
 ```
 
-You have to change the scaffolded Identity UI to get Identity to work with each tenant. Like suggested in the top answer [here](https://stackoverflow.com/questions/50682108/change-routing-in-asp-net-core-identity-ui)
+You have to painfully change the scaffolded Identity UI into a custom MVC implementation with an account controller and views to get Identity to work with each tenant. Like suggested in the top answer [here](https://stackoverflow.com/questions/50682108/change-routing-in-asp-net-core-identity-ui)
 
 Instead of adding AddDefaultIdentity(), the AddIdentity() should be added in Configure services.
 
