@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     /// <summary>
     /// Nice method to create the tenant builder

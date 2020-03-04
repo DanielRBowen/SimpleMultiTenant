@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Multitenancy;
 using SimpleMultiTenant.Data;
 using System;
 using System.Threading.Tasks;

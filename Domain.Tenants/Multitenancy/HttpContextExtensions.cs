@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     /// <summary>
     /// Extensions to HttpContext to make multi-tenancy easier to use

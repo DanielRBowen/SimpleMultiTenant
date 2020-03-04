@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Multitenancy;
 using SimpleMultiTenant.Extensions;
 
 namespace SimpleMultiTenant.Services

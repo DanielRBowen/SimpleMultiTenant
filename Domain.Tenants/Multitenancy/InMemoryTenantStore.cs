@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     /// <summary>
     /// In memory store for testing
@@ -10,6 +10,7 @@ namespace Multitenancy
     public class InMemoryTenantStore : ITenantStore<Tenant>
     {
         private readonly MultitenantConfiguration _multitenantConfiguration;
+
         public InMemoryTenantStore(MultitenantConfiguration multitenantConfiguration)
         {
             _multitenantConfiguration = multitenantConfiguration;
@@ -19,6 +20,7 @@ namespace Multitenancy
                 throw new NullReferenceException("There are no tenants in the multitenant configuration.");
             }
         }
+
         /// <summary>
         /// Get a tenant for a given identifier
         /// </summary>

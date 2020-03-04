@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     public interface ITenantResolutionStrategy
     {

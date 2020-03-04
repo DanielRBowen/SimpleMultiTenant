@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
-using Multitenancy;
 using SimpleMultiTenant.Data;
 using SimpleMultiTenant.Extensions;
 using SimpleMultiTenant.Models;

@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "TenantsSimple": "Server=(localdb)\\mssqllocaldb;Database=Tenants;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}

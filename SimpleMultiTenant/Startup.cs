@@ -12,13 +12,13 @@ using SimpleMultiTenant.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Multitenancy;
 using SimpleMultiTenant.Api;
-using Autofac;
 using SimpleMultiTenant.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using SimpleMultiTenant.Security;
+using Domain.Tenants.Data;
+using Domain.Tenants.Multitenancy;
 
 namespace SimpleMultiTenant
 {
@@ -35,7 +35,12 @@ namespace SimpleMultiTenant
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            LoadTenants(services);
+            services.AddDbContext<TenantsDbContext>(options =>
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("TenantsSimple")));
+
+            services.AddScoped<ApplicationDbContext>();
+            MigrateTenantsDatabases();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -67,65 +72,38 @@ namespace SimpleMultiTenant
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddDistributedMemoryCache();
+            services.AddScoped<ISettingsService, SettingsService>();
+
             services.AddMultiTenancy()
               .WithResolutionStrategy<HostResolutionStrategy>()
-              .WithStore<InMemoryTenantStore>();
+              .WithStore<TenantsDbStore>();
         }
 
-        private void LoadTenants(IServiceCollection services)
+        private void MigrateTenantsDatabases()
         {
-            var connectionStrings = Configuration.GetSection("ConnectionStrings").GetChildren().ToDictionary(pair => pair.Key, pair => pair.Value);
-            var tenants = new List<Tenant>();
+            var connectionStrings = GetConnectionStrings();
 
             foreach (var connectionString in connectionStrings)
             {
                 var connectionStringValue = connectionString.Value;
-
-                var tenant = new Tenant
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = connectionString.Key,
-                    ConnectionString = connectionStringValue
-                };
-
-                tenants.Add(tenant);
                 var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
                 var options = optionsBuilder.UseSqlServer(connectionStringValue).Options;
                 var dbContext = new ApplicationDbContext(options);
                 dbContext.Database.Migrate();
-                // Try to seed each database here.
+                //Data.SeedData.Seed(dbContext);
             }
-
-            var defaultTenantName = Configuration["DefaultTenant"];
-
-            var multitenantConfiguration = new MultitenantConfiguration
-            {
-                DefaultTenant = defaultTenantName,
-                Tenants = tenants
-            };
-
-            services.AddSingleton(configuration => multitenantConfiguration);
-            services.AddDistributedMemoryCache();
         }
 
-        public static void ConfigureMultiTenantServices(Tenant tenant, ContainerBuilder containerBuilder)
+        private Dictionary<string, string> GetConnectionStrings()
         {
-            containerBuilder.RegisterInstance(new OperationIdService()).SingleInstance();
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            var options = optionsBuilder.UseSqlServer(tenant.ConnectionString).Options;
-
-            containerBuilder.RegisterType<ApplicationDbContext>()
-                .WithParameter("options", options)
-                .InstancePerLifetimeScope();
-
-            containerBuilder.RegisterType<SettingsService>()
-               .AsSelf()
-               .As<ISettingsService>()
-               .InstancePerLifetimeScope();
+            var connectionStrings = Configuration.GetSection("ConnectionStrings").GetChildren().ToDictionary(pair => pair.Key, pair => pair.Value);
+            connectionStrings.Remove("TenantsSimple");
+            return connectionStrings;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, TenantsDbContext tenantsDbContext)
         {
             if (env.IsDevelopment())
             {
@@ -139,7 +117,7 @@ namespace SimpleMultiTenant
                 app.UseHsts();
             }
 
-            app.UseMultiTenancy().UseMultiTenantContainer();
+            app.UseMultiTenancy();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -156,6 +134,9 @@ namespace SimpleMultiTenant
 
                 endpoints.MapRazorPages();
             });
+
+            tenantsDbContext.Database.Migrate();
+            SeedData.SeedTenants(GetConnectionStrings(), tenantsDbContext);
         }
     }
 }

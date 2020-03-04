@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Multitenancy;
 using SimpleMultiTenant.Attributes;
 using SimpleMultiTenant.Data;
 using SimpleMultiTenant.Data.Entities;

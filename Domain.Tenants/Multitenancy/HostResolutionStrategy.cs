@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     /// <summary>
     /// Resolve the host to a tenant identifier
@@ -22,17 +22,20 @@ namespace Multitenancy
         /// <returns></returns>
         public async Task<string> GetTenantIdentifierAsync()
         {
-            if (_httpContextAccessor.HttpContext == null)
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            if (httpContext == null)
             {
                 return await Task.FromResult(string.Empty);
             }
             else
             {
-                var path = await Task.FromResult(_httpContextAccessor.HttpContext.Request.Path);
+                var path = await Task.FromResult(httpContext.Request.Path);
 
                 if (path.HasValue)
                 {
-                    return await Task.FromResult(path.Value.Split('/')[1]);
+                    var tenantIdentifier = path.Value.Split('/')[1];
+                    return await Task.FromResult(tenantIdentifier);
                 }
                 else
                 {

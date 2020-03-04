@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Encodings.Web;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Tenants.Multitenancy;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using Multitenancy;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace SimpleMultiTenant.Areas.Identity.Pages.Account
 {
@@ -95,7 +92,7 @@ namespace SimpleMultiTenant.Areas.Identity.Pages.Account
                     {
                         var customClaims = new[]
                         {
-                            new Claim("tid", _httpContextAccessor.HttpContext.GetTenant().Id)
+                            new Claim("tid", _httpContextAccessor.HttpContext.GetTenant().Guid)
                         };
 
                         var claimsPrincipal = await _signInManager.CreateUserPrincipalAsync(user);

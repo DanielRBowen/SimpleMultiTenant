@@ -1,4 +1,4 @@
-﻿namespace Multitenancy
+﻿namespace Domain.Tenants.Multitenancy
 {
     public static class MultiTenantConstants
     {

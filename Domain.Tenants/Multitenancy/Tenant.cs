@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     /// <summary>
     /// Tenant information
@@ -12,7 +11,9 @@ namespace Multitenancy
         /// The tenant Id
         /// </summary>
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
+
+        public string Guid { get; set; }
 
         /// <summary>
         /// The tenant identifier
@@ -20,9 +21,5 @@ namespace Multitenancy
         public string Name { get; set; }
 
         public string ConnectionString { get; set; }
-        /// <summary>
-        /// Tenant items
-        /// </summary>
-        //public Dictionary<string, object> Items { get; private set; } = new Dictionary<string, object>();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     public class MultitenantConfiguration
     {

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Multitenancy;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace SimpleMultiTenant.Security
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, InCurrentTenantRequirement requirement)
         {
-            var tenantId = _httpContextAccessor.HttpContext.GetTenant().Id;
+            var tenantId = _httpContextAccessor.HttpContext.GetTenant().Guid;
 
             if (context.User.FindFirstValue("tid") == tenantId || context.User.FindFirstValue(@"http://schemas.microsoft.com/identity/claims/tenantid") == tenantId)
             {

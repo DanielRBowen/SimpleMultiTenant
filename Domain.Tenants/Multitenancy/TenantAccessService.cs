@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 
-namespace Multitenancy
+namespace Domain.Tenants.Multitenancy
 {
     /// <summary>
     /// Tenant access service
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class TenantAccessService<T> where T : Tenant
+    public class TenantAccessService<T> where T : Tenant
     {
         private readonly ITenantResolutionStrategy _tenantResolutionStrategy;
         private readonly ITenantStore<T> _tenantStore;

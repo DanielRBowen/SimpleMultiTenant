@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Multitenancy;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Http;
 using SimpleMultiTenant.Data;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SimpleMultiTenant.Services
 {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -8,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Multitenancy;
 using SimpleMultiTenant.Data;
 
 namespace SimpleMultiTenant
@@ -22,11 +22,13 @@ namespace SimpleMultiTenant
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.AddJsonFile(Directory.GetCurrentDirectory() + "/../Domain.Tenants/tenantsconfig.json", optional: false, reloadOnChange: true);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-                .UseServiceProviderFactory(
-                    new MultiTenantServiceProviderFactory<Tenant>(Startup.ConfigureMultiTenantServices));
+                });
     }
 }

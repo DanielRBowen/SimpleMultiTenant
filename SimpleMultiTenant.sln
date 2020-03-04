@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMultiTenant", "SimpleMultiTenant\SimpleMultiTenant.csproj", "{258C0F95-6C8C-461A-AC36-1ECA7B10E0E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleMultiTenant", "SimpleMultiTenant\SimpleMultiTenant.csproj", "{258C0F95-6C8C-461A-AC36-1ECA7B10E0E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multitenancy", "Multitenancy\Multitenancy.csproj", "{E63A21D0-4A50-47F0-8392-C8C52CE1E2FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleMultiTenant.Data", "SimpleMultiTenant.Data\SimpleMultiTenant.Data.csproj", "{3CF3FC47-E08D-4341-9542-922D56988F08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleMultiTenant.Data", "SimpleMultiTenant.Data\SimpleMultiTenant.Data.csproj", "{3CF3FC47-E08D-4341-9542-922D56988F08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Tenants", "Domain.Tenants\Domain.Tenants.csproj", "{FC7C8092-AF54-42B9-8F87-1C6E79A77717}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{258C0F95-6C8C-461A-AC36-1ECA7B10E0E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{258C0F95-6C8C-461A-AC36-1ECA7B10E0E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{258C0F95-6C8C-461A-AC36-1ECA7B10E0E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E63A21D0-4A50-47F0-8392-C8C52CE1E2FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E63A21D0-4A50-47F0-8392-C8C52CE1E2FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E63A21D0-4A50-47F0-8392-C8C52CE1E2FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E63A21D0-4A50-47F0-8392-C8C52CE1E2FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CF3FC47-E08D-4341-9542-922D56988F08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC7C8092-AF54-42B9-8F87-1C6E79A77717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC7C8092-AF54-42B9-8F87-1C6E79A77717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC7C8092-AF54-42B9-8F87-1C6E79A77717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC7C8092-AF54-42B9-8F87-1C6E79A77717}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

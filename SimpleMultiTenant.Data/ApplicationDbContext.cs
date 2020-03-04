@@ -10,6 +10,9 @@ using SimpleMultiTenant.Data.Entities;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using Domain.Tenants.Data;
+using Domain.Tenants.Multitenancy;
 
 namespace SimpleMultiTenant.Data
 {
@@ -19,6 +22,25 @@ namespace SimpleMultiTenant.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        public ApplicationDbContext(IHttpContextAccessor httpContextAccessor, TenantsDbContext tenantsDbContext)
+           : base(CreateDbContextOptions(httpContextAccessor, tenantsDbContext))
+        {
+        }
+
+        private static DbContextOptions CreateDbContextOptions(IHttpContextAccessor httpContextAccessor, TenantsDbContext tenantsDbContext)
+        {
+            var tenantName = httpContextAccessor.HttpContext.GetTenant().Name;
+            var connectionString = tenantsDbContext.Tenants.SingleOrDefault(tenant => tenant.Name == tenantName).ConnectionString;
+
+            if (connectionString == null)
+            {
+                throw new NullReferenceException($"The connection string was null for the tenant: {tenantName}");
+            }
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            return optionsBuilder.UseSqlServer(connectionString).Options;
         }
 
         /// <summary>
@@ -66,11 +88,7 @@ namespace SimpleMultiTenant.Data
 
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-//#if DEBUG
                     .AddJsonFile(@Directory.GetCurrentDirectory() + "/../SimpleMultiTenant/appsettings.json")
-//#else
-//                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/wwwroot/custom/connection.json")
-//#endif
                     .Build();
 
                 var builder = new DbContextOptionsBuilder<ApplicationDbContext>();

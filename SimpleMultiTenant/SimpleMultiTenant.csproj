@@ -22,7 +22,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Multitenancy\Multitenancy.csproj" />
     <ProjectReference Include="..\SimpleMultiTenant.Data\SimpleMultiTenant.Data.csproj" />
   </ItemGroup>
 

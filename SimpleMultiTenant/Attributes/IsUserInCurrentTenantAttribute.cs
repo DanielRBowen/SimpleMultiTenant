@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Tenants.Multitenancy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Multitenancy;
 using System;
 namespace SimpleMultiTenant.Attributes
 {
@@ -19,7 +19,7 @@ namespace SimpleMultiTenant.Attributes
 
                 if (userClaimsPrinciple != null && signInManager.IsSignedIn(userClaimsPrinciple))
                 {
-                    var tenantId = httpContext.GetTenant().Id;
+                    var tenantId = httpContext.GetTenant().Guid;
                     var tenantName = httpContext.GetTenant().Name;
 
                     if (userClaimsPrinciple.HasClaim("tid", tenantId) == false)
