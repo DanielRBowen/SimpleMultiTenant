@@ -43,6 +43,14 @@ If you get an ANCM Multiple In-Process Applications in same Process Error when u
 
 The application will need to only have the authorize user see his tenant's site. A claim can be added while logging on and that claim can be checked on controllers and methods with a ActionFilterAttribute or be checked with an authorize policy. [This](https://blog.dangl.me/archive/adding-custom-claims-when-logging-in-with-aspnet-core-identity-cookie/) is how you can add a tenant id to the claims on the login process. [Here](https://github.com/DanielRBowen/SimpleMultiTenant/blob/master/SimpleMultiTenant/Attributes/IsUserInCurrentTenantAttribute.cs) is the ActionFilterAttribute to use on controllers without authorize attributes. And [this](https://github.com/DanielRBowen/SimpleMultiTenant/blob/master/SimpleMultiTenant/Security/InCurrentTenantRequirement.cs) is the Authorize requirement.
 
+When getting a token for authenticated API calls you will need to sign in with the claims principle which are going to be added to the token so that the claims show in the InCurrentTenantRequirment Like so:
+
+```
+await _signInManager.Context.SignInAsync(IdentityConstants.ApplicationScheme,
+                           principal,
+                           new AuthenticationProperties { IsPersistent = false });
+```
+
 This is how to configure application cookie to redirect to login when access is denied:
 
 ```
