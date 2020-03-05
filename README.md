@@ -1,7 +1,7 @@
 # SimpleMultiTenant
-A simple multi-tenant app with starting code from: [Michael Mckenna's blog](https://michael-mckenna.com/multi-tenant-asp-dot-net-core-application-tenant-resolution/) His Github is [here](https://github.com/myquay)
+A simple multi-tenant app with starting code from the first part of: [Michael Mckenna's blog](https://michael-mckenna.com/multi-tenant-asp-dot-net-core-application-tenant-resolution/) His Github is [here](https://github.com/myquay)
 
-## The Simple most recent way to do Multitenancy:
+## A simple way to do Multitenancy:
 The tenant is resolved by the first path route parameter.
 ```
 HttpContext.Request.Path.Value.Split('/')[1];
@@ -25,7 +25,7 @@ On Controllers which have an [ApiController] attribute it will also need a route
 [Route("{tenant}/[controller]")]
 ```
 
-You have to change the scaffolded Identity UI to get Identity to work with each tenant. Like suggested in the top answer [here](https://stackoverflow.com/questions/50682108/change-routing-in-asp-net-core-identity-ui)
+You have to painfully change the scaffolded Identity UI into a custom MVC implementation with an account controller and views to get Identity to work with each tenant. Like suggested in the top answer [here](https://stackoverflow.com/questions/50682108/change-routing-in-asp-net-core-identity-ui)
 
 Instead of adding AddDefaultIdentity(), the AddIdentity() should be added in Configure services.
 
@@ -61,7 +61,38 @@ This is how to configure application cookie to redirect to login when access is 
             });
 ```
 
-## Other dated ways to do Multitenancy
+This implementation add the tenantsDbContext and also add the applicationDbContext in ConfigureServices for dependency injection:
+ ```
+ services.AddDbContext<TenantsDbContext>(options =>
+               options.UseSqlServer(
+                   Configuration.GetConnectionString("TenantsSimple")));
+
+            services.AddScoped<ApplicationDbContext>();
+ ```
+
+For the DbContext constructor add the connection string:
+```
+ public ApplicationDbContext(IHttpContextAccessor httpContextAccessor, TenantsDbContext tenantsDbContext)
+           : base(CreateDbContextOptions(httpContextAccessor, tenantsDbContext))
+        {
+        }
+
+        private static DbContextOptions CreateDbContextOptions(IHttpContextAccessor httpContextAccessor, TenantsDbContext tenantsDbContext)
+        {
+            var tenantName = httpContextAccessor.HttpContext.GetTenant().Name;
+            var connectionString = tenantsDbContext.Tenants.SingleOrDefault(tenant => tenant.Name == tenantName).ConnectionString;
+
+            if (connectionString == null)
+            {
+                throw new NullReferenceException($"The connection string was null for the tenant: {tenantName}");
+            }
+
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            return optionsBuilder.UseSqlServer(connectionString).Options;
+        }
+```
+
+## Other Multitenancy examples
 (1)
 From Azure [multitenant example](https://docs.microsoft.com/en-us/azure/sql-database/saas-dbpertenant-wingtip-app-overview#sql-database-wingtip-saas-tutorials]):
 ```
