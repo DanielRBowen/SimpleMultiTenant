@@ -128,9 +128,15 @@ namespace SimpleMultiTenant
 
             app.UseEndpoints(endpoints =>
             {
+#if DEBUG
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{tenant}/{controller=Home}/{action=Index}/{id?}");
+#else
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+#endif
 
                 endpoints.MapRazorPages();
             });
