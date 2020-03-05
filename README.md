@@ -92,6 +92,12 @@ For the DbContext constructor add the connection string:
         }
 ```
 
+## Tenant resolved by subdomain or path?
+I have modified this simple example to only resolve as a path when in debug mode and be resolved as a subdomain in release.
+[This](https://stackoverflow.com/questions/4987201/why-use-subdomains-to-designate-tenants-in-a-multi-tenant-web-application) is a StackOverflow question which is asking if subdomain or path is better I think it is a good thing to figure out how to do both like the comments suggest:
+>As a recommendation, I would say design you app from the outset not to use subdomains, and then build this functionality in as a final layer. If you integrate subdomains all the way through, it becomes very inflexible to change it in future. (source: experience) 
+
+
 ## Other Multitenancy examples
 (1)
 From Azure [multitenant example](https://docs.microsoft.com/en-us/azure/sql-database/saas-dbpertenant-wingtip-app-overview#sql-database-wingtip-saas-tutorials]):
