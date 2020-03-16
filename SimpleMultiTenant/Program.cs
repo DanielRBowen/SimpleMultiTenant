@@ -24,7 +24,11 @@ namespace SimpleMultiTenant
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+#if DEBUG
                     config.AddJsonFile(Directory.GetCurrentDirectory() + "/../Domain.Tenants/tenantsconfig.json", optional: false, reloadOnChange: true);
+#else
+                    config.AddJsonFile(Directory.GetCurrentDirectory() + "/tenantsconfig.json", optional: false, reloadOnChange: true);
+#endif 
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

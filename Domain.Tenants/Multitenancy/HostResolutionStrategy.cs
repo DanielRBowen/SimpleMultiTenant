@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 
 namespace Domain.Tenants.Multitenancy
@@ -9,10 +10,14 @@ namespace Domain.Tenants.Multitenancy
     public class HostResolutionStrategy : ITenantResolutionStrategy
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IConfiguration _configuration;
 
-        public HostResolutionStrategy(IHttpContextAccessor httpContextAccessor)
+        public HostResolutionStrategy(
+            IHttpContextAccessor httpContextAccessor,
+            IConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -30,21 +35,24 @@ namespace Domain.Tenants.Multitenancy
             }
             else
             {
-#if DEBUG
-                var path = await Task.FromResult(httpContext.Request.Path);
-
-                if (path.HasValue)
+                if (_configuration.GetValue<bool>("UsePathToResolveTenant"))
                 {
-                    var tenantIdentifier = path.Value.Split('/')[1];
-                    return await Task.FromResult(tenantIdentifier);
+                    var path = await Task.FromResult(httpContext.Request.Path);
+
+                    if (path.HasValue)
+                    {
+                        var tenantIdentifier = path.Value.Split('/')[1];
+                        return await Task.FromResult(tenantIdentifier);
+                    }
+                    else
+                    {
+                        return await Task.FromResult(string.Empty);
+                    }
                 }
                 else
                 {
-                    return await Task.FromResult(string.Empty);
+                    return await Task.FromResult(GetSubDomain(httpContext));
                 }
-#else
-                return await Task.FromResult(GetSubDomain(httpContext));
-#endif
             }
         }
 

@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SimpleMultiTenant.Data\SimpleMultiTenant.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content CopyToPublishDirectory="Always" Include="..\Domain.Tenants\tenantsconfig.json"></Content>
+  </ItemGroup>
+
 </Project>

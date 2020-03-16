@@ -1,6 +1,8 @@
 ﻿@using Domain.Tenants.Multitenancy
 @using SimpleMultiTenant.Services
+@using Microsoft.Extensions.Configuration
 @inject ISettingsService _settingsService
+@inject IConfiguration _configuration
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -47,15 +49,14 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-    <environment include="Development">
+    @if (_configuration.GetValue<bool>("UsePathToResolveTenant"))
+    {
         <script src="~/js/tenant-globals-path.js"></script>
-        <script src="https://unpkg.com/vue"></script>
-    </environment>
-
-    <environment exclude="Development">
+    }
+    else
+    {
         <script src="~/js/tenant-globals-subdomain.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js" crossorigin="anonymous"></script>
-    </environment>
+    }
 
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

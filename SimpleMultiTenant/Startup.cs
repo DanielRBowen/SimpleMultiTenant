@@ -53,7 +53,16 @@ namespace SimpleMultiTenant
                     OnRedirectToAccessDenied = context =>
                     {
                         var tenantName = context.HttpContext.GetTenant().Name;
-                        context.Response.Redirect(new PathString($"/{tenantName}/Account/Login"));
+
+                        if (Configuration.GetValue<bool>("UsePathToResolveTenant"))
+                        {
+                            context.Response.Redirect(new PathString($"/{tenantName}/Account/Login"));
+                        }
+                        else
+                        {
+                            context.Response.Redirect(new PathString("/Account/Login"));
+                        }
+
                         return Task.CompletedTask;
                     }
                 };
@@ -73,6 +82,13 @@ namespace SimpleMultiTenant
             services.AddRazorPages();
 
             services.AddDistributedMemoryCache();
+
+            //services.AddStackExchangeRedisCache(options =>
+            //{
+            //    options.Configuration = Configuration["RedisConfig:Configuration"];
+            //    options.InstanceName = Configuration["RedisConfig:InstanceName"];
+            //});
+
             services.AddScoped<ISettingsService, SettingsService>();
 
             services.AddMultiTenancy()
@@ -128,15 +144,18 @@ namespace SimpleMultiTenant
 
             app.UseEndpoints(endpoints =>
             {
-#if DEBUG
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{tenant}/{controller=Home}/{action=Index}/{id?}");
-#else
-                endpoints.MapControllerRoute(
+                if (Configuration.GetValue<bool>("UsePathToResolveTenant"))
+                {
+                    endpoints.MapControllerRoute(
+                        name: "default",
+                        pattern: "{tenant}/{controller=Home}/{action=Index}/{id?}");
+                }
+                else
+                {
+                    endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-#endif
+                }
 
                 endpoints.MapRazorPages();
             });
