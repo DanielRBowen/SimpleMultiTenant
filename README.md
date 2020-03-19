@@ -19,10 +19,11 @@ You will need to add the tenant name for javascript http requests so in Javascri
 tenantName: '/' + window.location.pathname.split('/')[1]
 ```
 
-On Controllers which have an [ApiController] attribute it will also need a route attribute with the tenant.
+On Controllers which have an [ApiController] attribute it will also need a route attribute with the tenant. And also have the non tenant one so that the subdomain works.
 ```
 [ApiController]
-[Route("{tenant}/[controller]")]
+[Route("{tenant?}/api/[controller]")]
+[Route("api/[controller]")]
 ```
 
 You have to painfully change the scaffolded Identity UI into a custom MVC implementation with an account controller and views to get Identity to work with each tenant. Like suggested in the top answer [here](https://stackoverflow.com/questions/50682108/change-routing-in-asp-net-core-identity-ui)
@@ -119,4 +120,36 @@ and
 From [SaasKit](https://github.com/saaskit/saaskit/tree/dev)
 ```
 git clone --single-branch --branch dev https://github.com/saaskit/saaskit.git
+```
+
+## For Redis Cache
+I installed Ubuntu 18.04 LTS from the Microsoft Store
+Turn on "Windows Subsystem for Linux" in the Windows Features in the Windows Control panel then restart the computer.
+Open up Ubuntu and set a username and password
+In the Ubuntu shell do: 
+```
+sudo apt update && sudo apt upgrade
+```
+Then:
+```
+sudo apt install redis-server
+```
+To restart the redis server
+```
+sudo service redis-server restart
+```
+Then open the cli for redis
+```
+redis-cli
+```
+In the cli
+```
+client getname
+client setname eow
+```
+In the appsettings.json set the Configuration of the RedisConfig to the redis IP and portnumber such as 127.0.0.1:6379 and the InstanceName to the name you just set.
+
+To see all the keys type
+```
+keys *
 ```
