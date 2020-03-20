@@ -39,7 +39,7 @@ namespace Domain.Tenants.Multitenancy
             }
             else
             {
-                tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == name.ToLowerInvariant());
+                tenant = _multitenantConfiguration.Tenants.SingleOrDefault(tenant => tenant.Name.ToLower() == name.ToLower());
             }
 
             if (tenant == null)
