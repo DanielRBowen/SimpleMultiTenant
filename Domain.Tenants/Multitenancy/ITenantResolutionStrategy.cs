@@ -4,6 +4,6 @@ namespace Domain.Tenants.Multitenancy
 {
     public interface ITenantResolutionStrategy
     {
-        Task<string> GetTenantIdentifierAsync();
+        Task<(string domainName, string ipAddresss, string name)> GetTenantIdentifierAsync();
     }
 }

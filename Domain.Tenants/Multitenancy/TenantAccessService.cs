@@ -23,8 +23,8 @@ namespace Domain.Tenants.Multitenancy
         /// <returns></returns>
         public async Task<T> GetTenantAsync()
         {
-            var tenantIdentifier = await _tenantResolutionStrategy.GetTenantIdentifierAsync();
-            return await _tenantStore.GetTenantAsync(tenantIdentifier);
+            var (domainName, ipAddress, name) = await _tenantResolutionStrategy.GetTenantIdentifierAsync();
+            return await _tenantStore.GetTenantAsync(domainName, ipAddress, name);
         }
     }
 }

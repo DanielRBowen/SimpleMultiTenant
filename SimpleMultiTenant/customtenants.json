@@ -1,0 +1,42 @@
+[
+  {
+    "Id": 1,
+    "Guid": "e886a336-6c14-4ecc-bbbc-e342550b0610",
+    "Name": "DefaultConnection",
+    "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Localhost;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "IpAddresses": null,
+    "DomainNames": null
+  },
+  {
+    "Id": 2,
+    "Guid": "57beb5a2-e736-4948-81d2-e26b42a342f2",
+    "Name": "Tenant1",
+    "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Tenant1;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "IpAddresses": null,
+    "DomainNames": null
+  },
+  {
+    "Id": 3,
+    "Guid": "58dcd1f8-a4a7-4598-859a-205b5039094b",
+    "Name": "Tenant2",
+    "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Tenant2;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "IpAddresses": null,
+    "DomainNames": null
+  },
+  {
+    "Id": 4,
+    "Guid": "50bf139f-69bc-4321-b479-916968bb3134",
+    "Name": "Aleidy",
+    "ConnectionString": "\"Aleidy\": \"Server=(localdb)\\\\mssqllocaldb;Database=Aleidy;Trusted_Connection=True;MultipleActiveResultSets=true\"",
+    "IpAddresses": "233.106.33.141, 33.225.61.124",
+    "DomainNames": "aleidy.com"
+  },
+  {
+    "Id": 5,
+    "Guid": "b4593603-089b-4770-9f63-f8c61acf3dd1",
+    "Name": "Oiscus",
+    "ConnectionString": "\"Oiscus\": \"Server=(localdb)\\\\mssqllocaldb;Database=Oiscus;Trusted_Connection=True;MultipleActiveResultSets=true\"",
+    "IpAddresses": "97.198.174.206, 216.204.170.148",
+    "DomainNames": "oiscus.com, slonds.com"
+  }
+]

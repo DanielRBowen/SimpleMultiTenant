@@ -27,11 +27,11 @@ namespace Domain.Tenants.Data
             {
                 var configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Eow.Web.Tenants/tenantsconfig.json")
+                    .AddJsonFile(@Directory.GetCurrentDirectory() + "/../Domain.Tenants/tenantsconfig.json")
                     .Build();
 
                 var builder = new DbContextOptionsBuilder<TenantsDbContext>();
-                var connectionString = configuration.GetConnectionString("Tenants");
+                var connectionString = configuration.GetConnectionString("TenantsSimple");
                 builder.UseSqlServer(connectionString);
                 return new TenantsDbContext(builder.Options);
             }

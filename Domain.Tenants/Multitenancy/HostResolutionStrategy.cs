@@ -25,16 +25,19 @@ namespace Domain.Tenants.Multitenancy
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<string> GetTenantIdentifierAsync()
+        public async Task<(string domainName, string ipAddresss, string name)> GetTenantIdentifierAsync()
         {
             var httpContext = _httpContextAccessor.HttpContext;
 
             if (httpContext == null)
             {
-                return await Task.FromResult(string.Empty);
+                return await Task.FromResult((string.Empty, string.Empty, string.Empty));
             }
             else
             {
+                var domainName = httpContext.Request.Host.Host;
+                var ipAddress = GetIpAddress(httpContext);
+
                 if (_configuration.GetValue<bool>("UsePathToResolveTenant"))
                 {
                     var path = await Task.FromResult(httpContext.Request.Path);
@@ -42,17 +45,32 @@ namespace Domain.Tenants.Multitenancy
                     if (path.HasValue)
                     {
                         var tenantIdentifier = path.Value.Split('/')[1];
-                        return await Task.FromResult(tenantIdentifier);
+                        return await Task.FromResult((domainName, ipAddress, tenantIdentifier));
                     }
                     else
                     {
-                        return await Task.FromResult(string.Empty);
+                        return await Task.FromResult((domainName, ipAddress, string.Empty));
                     }
                 }
                 else
                 {
-                    return await Task.FromResult(GetSubDomain(httpContext));
+                    return await Task.FromResult((domainName, ipAddress, GetSubDomain(httpContext)));
                 }
+            }
+        }
+
+        private static string GetIpAddress(HttpContext httpContext)
+        {
+            var remoteIpAddress = httpContext.Connection.RemoteIpAddress;
+            var ipAddressString = remoteIpAddress.ToString();
+
+            if (remoteIpAddress.IsIPv4MappedToIPv6)
+            {
+                return remoteIpAddress.MapToIPv6().ToString();
+            }
+            else
+            {
+                return remoteIpAddress.MapToIPv4().ToString();
             }
         }
 

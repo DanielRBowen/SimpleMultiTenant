@@ -1,6 +1,8 @@
 ﻿using Domain.Tenants.Multitenancy;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Domain.Tenants.Data
@@ -31,7 +33,36 @@ namespace Domain.Tenants.Data
                 }
             }
 
+
+            var newTenant1 = new Tenant
+            {
+                Guid = Guid.NewGuid().ToString(),
+                Name = "Aleidy",
+                ConnectionString = $"\"Aleidy\": \"Server=(localdb)\\\\mssqllocaldb;Database=Aleidy;Trusted_Connection=True;MultipleActiveResultSets=true\"",
+                DomainNames = "aleidy.com",
+                IpAddresses = "233.106.33.141, 33.225.61.124"
+            };
+
+            tenantsDbContext.Tenants.Add(newTenant1);
+
+            var newTenant2 = new Tenant
+            {
+                Guid = Guid.NewGuid().ToString(),
+                Name = "Oiscus",
+                ConnectionString = $"\"Oiscus\": \"Server=(localdb)\\\\mssqllocaldb;Database=Oiscus;Trusted_Connection=True;MultipleActiveResultSets=true\"",
+                DomainNames = "oiscus.com, slonds.com",
+                IpAddresses = "97.198.174.206, 216.204.170.148"
+            };
+
+            tenantsDbContext.Tenants.Add(newTenant2);
             tenantsDbContext.SaveChanges();
+            WriteTenantsToFile(tenantsDbContext.Tenants.ToList());
+        }
+
+        private static void WriteTenantsToFile(IEnumerable<Tenant> tenants)
+        {
+            var contents = JsonConvert.SerializeObject(tenants);
+            File.WriteAllText(Directory.GetCurrentDirectory() + "/customtenants.json", contents);
         }
     }
 }

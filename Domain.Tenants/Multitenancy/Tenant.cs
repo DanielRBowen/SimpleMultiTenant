@@ -21,5 +21,15 @@ namespace Domain.Tenants.Multitenancy
         public string Name { get; set; }
 
         public string ConnectionString { get; set; }
+
+        /// <summary>
+        /// A string which contains ip addresses which are comma delimited. Such as "97.198.174.206, 216.204.170.148"
+        /// </summary>
+        public string IpAddresses { get; set; }
+
+        /// <summary>
+        /// A string which contains domain names which are comma delimited. Such as "oiscus.com, slonds.com"
+        /// </summary>
+        public string DomainNames { get; set; }
     }
 }

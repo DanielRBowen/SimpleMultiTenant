@@ -4,6 +4,6 @@ namespace Domain.Tenants.Multitenancy
 {
     public interface ITenantStore<T> where T : Tenant
     {
-        Task<T> GetTenantAsync(string identifier);
+        Task<T> GetTenantAsync(string domainName, string ipAddress, string name);
     }
 }
