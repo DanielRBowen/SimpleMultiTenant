@@ -1,7 +1,7 @@
 [
   {
     "Id": 1,
-    "Guid": "e886a336-6c14-4ecc-bbbc-e342550b0610",
+    "Guid": "0b3cb707-84d4-426e-bf91-d7ab704a3a04",
     "Name": "DefaultConnection",
     "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Localhost;Trusted_Connection=True;MultipleActiveResultSets=true",
     "IpAddresses": null,
@@ -9,7 +9,7 @@
   },
   {
     "Id": 2,
-    "Guid": "57beb5a2-e736-4948-81d2-e26b42a342f2",
+    "Guid": "0bfbe1a7-2689-414f-922c-3405d2f8806b",
     "Name": "Tenant1",
     "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Tenant1;Trusted_Connection=True;MultipleActiveResultSets=true",
     "IpAddresses": null,
@@ -17,7 +17,7 @@
   },
   {
     "Id": 3,
-    "Guid": "58dcd1f8-a4a7-4598-859a-205b5039094b",
+    "Guid": "5b6839f6-0941-4ab6-a8d8-4241975ca497",
     "Name": "Tenant2",
     "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=Tenant2;Trusted_Connection=True;MultipleActiveResultSets=true",
     "IpAddresses": null,
@@ -25,7 +25,7 @@
   },
   {
     "Id": 4,
-    "Guid": "50bf139f-69bc-4321-b479-916968bb3134",
+    "Guid": "4916ca9c-af10-4fb6-b29a-5188c8e908d9",
     "Name": "Aleidy",
     "ConnectionString": "\"Aleidy\": \"Server=(localdb)\\\\mssqllocaldb;Database=Aleidy;Trusted_Connection=True;MultipleActiveResultSets=true\"",
     "IpAddresses": "233.106.33.141, 33.225.61.124",
@@ -33,7 +33,7 @@
   },
   {
     "Id": 5,
-    "Guid": "b4593603-089b-4770-9f63-f8c61acf3dd1",
+    "Guid": "63f6aa20-59ee-443a-bb19-706071f973ad",
     "Name": "Oiscus",
     "ConnectionString": "\"Oiscus\": \"Server=(localdb)\\\\mssqllocaldb;Database=Oiscus;Trusted_Connection=True;MultipleActiveResultSets=true\"",
     "IpAddresses": "97.198.174.206, 216.204.170.148",

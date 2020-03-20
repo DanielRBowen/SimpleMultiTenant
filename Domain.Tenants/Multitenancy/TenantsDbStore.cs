@@ -32,7 +32,7 @@ namespace Domain.Tenants.Multitenancy
             {
                 try
                 {
-                    tenant = _tenantsDbContext.Tenants.SingleOrDefault(tenant => tenant.Name.ToLowerInvariant() == name.ToLowerInvariant());
+                    tenant = _tenantsDbContext.Tenants.SingleOrDefault(tenant => tenant.Name.ToLower() == name.ToLower());
                 }
                 catch (Exception ex)
                 {
