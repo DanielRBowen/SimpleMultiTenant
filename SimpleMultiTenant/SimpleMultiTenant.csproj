@@ -29,4 +29,8 @@
     <Content CopyToPublishDirectory="Always" Include="..\Domain.Tenants\tenantsconfig.json"></Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\tenants\!\custom\" />
+  </ItemGroup>
+
 </Project>

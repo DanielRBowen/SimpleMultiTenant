@@ -64,9 +64,13 @@ namespace Domain.Tenants.Data
             }
 
             tenantsDbContext.SaveChanges();
-            WriteTenantsToFile(tenantsDbContext.Tenants.ToList());
+            //WriteTenantsToFile(tenantsDbContext.Tenants.ToList());
         }
 
+        /// <summary>
+        /// This was just to see what the json looks like for a list of tenants.
+        /// </summary>
+        /// <param name="tenants"></param>
         private static void WriteTenantsToFile(IEnumerable<Tenant> tenants)
         {
             var contents = JsonConvert.SerializeObject(tenants, Formatting.Indented);

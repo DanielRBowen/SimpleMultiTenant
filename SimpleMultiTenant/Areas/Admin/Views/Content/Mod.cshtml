@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Mod";
+}
+
+@section Styles {
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" />
+    <link href="https://raw.githubusercontent.com/xaksis/vue-good-table/master/dist/vue-good-table.css" rel="stylesheet" />
+}
+
+<h2>Mod</h2>
+
+<div id="mod">
+    <div v-if="showAlert" class="alert alert-success" role="alert" v-bind:class='alertClass'>
+        {{ alertMessage }}
+    </div>
+
+    <b-card bg-variant="light" title="Edit Tenant">
+        <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Name" label-for="input-lg">
+            <b-form-input size="lg" v-model="editTenant.name"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Connection String" label-for="input-lg">
+            <b-form-input size="lg" v-model="editTenant.connectionString"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Domain Names" label-for="input-lg">
+            <b-form-input size="lg" v-model="editTenant.domainNames"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols="4" label-cols-lg="2" label-size="lg" label="Ip Addresses" label-for="input-lg">
+            <b-form-input size="lg" v-model="editTenant.ipAddresses"></b-form-input>
+        </b-form-group>
+        <b-button-group>
+            <b-button variant="primary" ref="createButton" v-on:click="createTenant">Create</b-button>
+            <b-button variant="danger" ref="deleteButton" v-on:click="deleteTenant">Delete</b-button>
+            <b-button variant="primary" ref="updateDomainNamesButton" v-on:click="updateDomainNames">Update Domain Names</b-button>
+            <b-button variant="primary" ref="updateIpAddressesButton" v-on:click="updateIpAddresses">Update Ip Addresses</b-button>
+        </b-button-group>
+    </b-card>
+
+    <b-card bg-variant="light" title="Tenants">
+        <vue-good-table :pagination-options="{ enabled: true, perPage: 50 }"
+                        :search-options="{ enabled: true, placeholder: 'Search tenants'}"
+                        :rows="rows"
+                        :columns="columns"
+                        style-class="vgt-table condensed"
+                        :sort-options="{ enabled: true, initialSortBy: {field: 'name', type: 'desc'}
+					  }">
+        </vue-good-table>
+    </b-card>
+</div>
+
+@section Scripts
+{
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <environment include="Development">
+        <script src="https://unpkg.com/vue"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js" crossorigin="anonymous"></script>
+    </environment>
+
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="https://raw.githubusercontent.com/xaksis/vue-good-table/master/dist/vue-good-table.js"></script>
+    <script src="~/js/Mod/mod-instance.js"></script>
+}

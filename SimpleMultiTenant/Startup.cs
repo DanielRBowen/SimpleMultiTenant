@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Http;
 using SimpleMultiTenant.Security;
 using Domain.Tenants.Data;
 using Domain.Tenants.Multitenancy;
+using SimpleMultiTenant.FileManagement;
+using System.IO;
 
 namespace SimpleMultiTenant
 {
@@ -108,6 +110,7 @@ namespace SimpleMultiTenant
                 var dbContext = new ApplicationDbContext(options);
                 dbContext.Database.Migrate();
                 //Data.SeedData.Seed(dbContext);
+                TenantsCustomFolderManager.CreateContentDirectoryIfItDoesNotExist(Directory.GetCurrentDirectory() + "/wwwroot/tenants/", connectionString.Key);
             }
         }
 
@@ -162,6 +165,7 @@ namespace SimpleMultiTenant
 
             tenantsDbContext.Database.Migrate();
             SeedData.SeedTenants(GetConnectionStrings(), tenantsDbContext);
+            CustomTenantsFileManager.AddAnyNewCustomDomainsOrIps(tenantsDbContext);
         }
     }
 }
