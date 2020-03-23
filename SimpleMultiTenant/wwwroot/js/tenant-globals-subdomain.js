@@ -6,4 +6,16 @@ function getSubdomain(hostname) {
 }
 
 let tenantPath = '';
-let tenantName = getSubdomain(window.location.hostname);
+//let tenantName = getSubdomain(window.location.hostname);
+let tenantName = '';
+
+// What if there is no subdomain and there is a domain name or ip address associated with the tenant then get tenant found on the server.
+if (typeof tenantName === 'undefined' || tenantName === '') {
+    axios.get('api/tenants/gettenantname')
+        .then(response => {
+            tenantName = response.data;
+        })
+        .catch(error => {
+            console.log(error.response.message);
+        });
+}
