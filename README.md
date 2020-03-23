@@ -106,6 +106,15 @@ I have modified this simple example to only resolve as a path when in debug mode
 [This](https://stackoverflow.com/questions/4987201/why-use-subdomains-to-designate-tenants-in-a-multi-tenant-web-application) is a StackOverflow question which is asking if subdomain or path is better I think it is a good thing to figure out how to do both like the comments suggest:
 >As a recommendation, I would say design you app from the outset not to use subdomains, and then build this functionality in as a final layer. If you integrate subdomains all the way through, it becomes very inflexible to change it in future. (source: experience) 
 
+## To change from path to subtenant resolver
+To change to resolve to path set UsePathToResolveTenant: to true in the appsettings.
+Use IIS express when developing when UsePathToResolveTenant is true.
+Use IIS when UsePathToResolveTenant is false by modifing the [host file](https://bowerwebsolutions.com/how-to-edit-your-local-host-file-for-testing-web-sites/).
+
+Follow by creating an debug profile. [Here is a tutorial how.](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/development-time-iis-support?view=aspnetcore-3.1)
+
+
+Set a default tenant and a connection string and tenantname for the connection string in appsettings too.
 
 ## Other Multitenancy examples
 (1)
