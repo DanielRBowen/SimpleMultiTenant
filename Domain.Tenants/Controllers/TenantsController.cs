@@ -17,7 +17,7 @@ namespace Domain.Tenants.Controllers
         [HttpGet("GetTenantName")]
         public IActionResult GetTenantName()
         {
-            var tenantName = _httpContextAccessor.HttpContext.GetTenant().Name;
+            var tenantName = _httpContextAccessor.HttpContext.GetTenant().Name.ToLowerInvariant();
             return Ok(tenantName);
         }
     }

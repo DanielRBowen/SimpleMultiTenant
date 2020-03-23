@@ -6,8 +6,7 @@ function getSubdomain(hostname) {
 }
 
 let tenantPath = '';
-//let tenantName = getSubdomain(window.location.hostname);
-let tenantName = '';
+let tenantName = getSubdomain(window.location.hostname);
 
 // What if there is no subdomain and there is a domain name or ip address associated with the tenant then get tenant found on the server.
 if (typeof tenantName === 'undefined' || tenantName === '') {
