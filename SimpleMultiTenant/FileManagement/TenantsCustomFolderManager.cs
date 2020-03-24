@@ -7,6 +7,8 @@ namespace SimpleMultiTenant.FileManagement
 {
     public class TenantsCustomFolderManager
     {
+        private static readonly string s_connectionsFilePath = Directory.GetCurrentDirectory() + "/connections.json";
+
         public static bool DoesTenantHaveCustomFolder(string tenantsDirectory, string tenantName)
         {
             return Directory.Exists(tenantsDirectory + tenantName);
@@ -56,24 +58,22 @@ namespace SimpleMultiTenant.FileManagement
 
         public static void DeleteTenantFromConfiguration(string tenantName)
         {
-            var appSettingsPath = Directory.GetCurrentDirectory() + "/appsettings.json";
-            var appSettingsJObject = JObject.Parse(File.ReadAllText(appSettingsPath));
-            var connectionStringToken = appSettingsJObject["ConnectionStrings"][tenantName];
+            var connectionsJObject = JObject.Parse(File.ReadAllText(s_connectionsFilePath));
+            var connectionStringToken = connectionsJObject["ConnectionStrings"][tenantName];
 
             if (connectionStringToken != null)
             {
                 connectionStringToken.Parent.Remove();
-                appSettingsJObject.ToString();
-                File.WriteAllText(appSettingsPath, appSettingsJObject.ToString());
+                connectionsJObject.ToString();
+                File.WriteAllText(s_connectionsFilePath, connectionsJObject.ToString());
             }
         }
 
         public static void CreateTenantInConfiguration(string tenantName, string connectionString)
         {
-            var appSettingsPath = Directory.GetCurrentDirectory() + "/appsettings.json";
-            var appSettingsJObject = JObject.Parse(File.ReadAllText(appSettingsPath));
-            appSettingsJObject["ConnectionStrings"].Children().Last().AddAfterSelf(new JProperty(tenantName, connectionString));
-            File.WriteAllText(appSettingsPath, appSettingsJObject.ToString());
+            var connectionsJObject = JObject.Parse(File.ReadAllText(s_connectionsFilePath));
+            connectionsJObject["ConnectionStrings"].Children().Last().AddAfterSelf(new JProperty(tenantName, connectionString));
+            File.WriteAllText(s_connectionsFilePath, connectionsJObject.ToString());
         }
     }
 }

@@ -83,13 +83,18 @@ namespace SimpleMultiTenant
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddDistributedMemoryCache();
-
-            //services.AddStackExchangeRedisCache(options =>
-            //{
-            //    options.Configuration = Configuration["RedisConfig:Configuration"];
-            //    options.InstanceName = Configuration["RedisConfig:InstanceName"];
-            //});
+            if (Configuration.GetValue<bool>("UseRedis"))
+            {
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = Configuration["RedisConfig:Configuration"];
+                    options.InstanceName = Configuration["RedisConfig:InstanceName"];
+                });
+            }
+            else
+            {
+                services.AddDistributedMemoryCache();
+            }
 
             services.AddScoped<ISettingsService, SettingsService>();
 
