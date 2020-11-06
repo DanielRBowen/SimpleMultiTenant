@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SimpleMultiTenant.Data;
+using Domain.Tenants.Logging;
 
 namespace SimpleMultiTenant
 {
@@ -30,6 +31,17 @@ namespace SimpleMultiTenant
 #else
                     config.AddJsonFile(Directory.GetCurrentDirectory() + "/tenantsconfig.json", optional: false, reloadOnChange: true);
 #endif 
+                })
+                .ConfigureLogging((hostingContext, logging) =>
+                {
+                    //Configure NLog: https://hackernoon.com/integrating-logging-using-nlog-in-aspnet-core-30-web-app-6k1d3zk3
+                    logging.ClearProviders();
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole(options => options.IncludeScopes = true);
+                    logging.AddDebug();
+                    logging.AddEventLog();
+                    logging.AddEventSourceLogger();
+                    logging.AddTenantFile(); // Code from https://github.com/andrewlock/NetEscapades.Extensions.Logging
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {

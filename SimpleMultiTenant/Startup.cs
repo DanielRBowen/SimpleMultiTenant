@@ -21,6 +21,7 @@ using Domain.Tenants.Data;
 using Domain.Tenants.Multitenancy;
 using SimpleMultiTenant.FileManagement;
 using System.IO;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace SimpleMultiTenant
 {
@@ -105,6 +106,8 @@ namespace SimpleMultiTenant
 
         private void MigrateTenantsDatabases()
         {
+            // Instead of using the connections.json file. Managing tenants from the TenantsDbContext will work too.
+            // var tenants = new TenantsDbContext(options).Tenants.ToList();
             var connectionStrings = GetConnectionStrings();
 
             foreach (var connectionString in connectionStrings)
@@ -114,7 +117,10 @@ namespace SimpleMultiTenant
                 var options = optionsBuilder.UseSqlServer(connectionStringValue).Options;
                 var dbContext = new ApplicationDbContext(options);
                 dbContext.Database.Migrate();
-                //Data.SeedData.Seed(dbContext);
+                 IUserStore<IdentityUser> store = new UserStore<IdentityUser>(dbContext);
+                var userManager = new UserManager<IdentityUser>(store, null, new PasswordHasher<IdentityUser>(), null, null, null, null, null, null);
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext), null, null, null, null);
+                Data.SeedData.Seed(dbContext, userManager, roleManager, new string[] { "admin" }).Wait();
                 TenantsCustomFolderManager.CreateContentDirectoryIfItDoesNotExist(Directory.GetCurrentDirectory() + "/wwwroot/tenants/", connectionString.Key);
             }
         }
@@ -169,7 +175,7 @@ namespace SimpleMultiTenant
             });
 
             tenantsDbContext.Database.Migrate();
-            SeedData.SeedTenants(GetConnectionStrings(), tenantsDbContext);
+            Domain.Tenants.Data.SeedData.SeedTenants(GetConnectionStrings(), tenantsDbContext);
             CustomTenantsFileManager.AddAnyNewCustomDomainsOrIps(tenantsDbContext);
         }
     }

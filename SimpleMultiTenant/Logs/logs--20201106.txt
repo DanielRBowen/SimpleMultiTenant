@@ -1,0 +1,5 @@
+2020-11-06 13:51:36.450 -07:00 [Information] Microsoft.Hosting.Lifetime: Application started. Press Ctrl+C to shut down.
+2020-11-06 13:51:36.459 -07:00 [Information] Microsoft.Hosting.Lifetime: Hosting environment: Development
+2020-11-06 13:51:36.462 -07:00 [Information] Microsoft.Hosting.Lifetime: Content root path: C:\Daniel\Source\Repos\SimpleMultiTenant\SimpleMultiTenant
+2020-11-06 13:52:10.806 -07:00 [Error] Domain.Tenants.Multitenancy.TenantsDbStore: There were multiple tenants which have the same domain name that was being looked up. Domain names must be unique.
+2020-11-06 13:52:10.829 -07:00 [Error] Domain.Tenants.Multitenancy.TenantsDbStore: There were multiple tenants which have the same ip address that was being looked up. Ip Addresses must be unique.

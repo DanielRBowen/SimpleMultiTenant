@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SimpleMultiTenant.Services
 {
-    public class TenantClaimsSignInHelper
+    public class TenantClaimsSignInHelper : ITenantClaimsSignInHelper
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<IdentityUser> _signInManager;
