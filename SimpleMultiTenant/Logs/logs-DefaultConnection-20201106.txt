@@ -1,1 +1,0 @@
-2020-11-06 13:52:10.716 -07:00 [Information] SimpleMultiTenant.Areas.Identity.Pages.Account.LoginModel: User logged in.

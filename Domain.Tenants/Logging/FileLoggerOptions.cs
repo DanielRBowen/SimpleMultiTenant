@@ -86,6 +86,6 @@ namespace Domain.Tenants.Logging
 		/// Default to <c>Logs</c>
 		/// </summary>
 		/// <returns></returns>
-		public string LogDirectory { get; set; } = "Logs";
+		public string LogDirectory { get; set; } = "Log";
 	}
 }
