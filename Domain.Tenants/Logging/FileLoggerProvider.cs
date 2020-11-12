@@ -67,17 +67,40 @@ namespace Domain.Tenants.Logging
 
 		private string GetFullName((int Year, int Month, int Day, int Hour, int Minute, string tenant) group)
 		{
-			switch (_periodicity)
+			if (string.IsNullOrWhiteSpace(group.tenant) == false)
 			{
-				case PeriodicityOptions.Minutely:
-					return Path.Combine(_path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}{group.Day:00}{group.Hour:00}{group.Minute:00}.{_extension}");
-				case PeriodicityOptions.Hourly:
-					return Path.Combine(_path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}{group.Day:00}{group.Hour:00}.{_extension}");
-				case PeriodicityOptions.Daily:
-					return Path.Combine(_path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}{group.Day:00}.{_extension}");
-				case PeriodicityOptions.Monthly:
-					return Path.Combine(_path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}.{_extension}");
+				var path = Path.Combine(_path, group.tenant.ToString());
+
+				Directory.CreateDirectory(path);
+
+				switch (_periodicity)
+				{
+					case PeriodicityOptions.Minutely:
+						return Path.Combine(path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}{group.Day:00}{group.Hour:00}{group.Minute:00}.{_extension}");
+					case PeriodicityOptions.Hourly:
+						return Path.Combine(path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}{group.Day:00}{group.Hour:00}.{_extension}");
+					case PeriodicityOptions.Daily:
+						return Path.Combine(path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}{group.Day:00}.{_extension}");
+					case PeriodicityOptions.Monthly:
+						return Path.Combine(path, $"{_fileName}{group.tenant}-{group.Year:0000}{group.Month:00}.{_extension}");
+				}
 			}
+			else
+			{
+				switch (_periodicity)
+				{
+					case PeriodicityOptions.Minutely:
+						return Path.Combine(_path, $"{_fileName}-{group.Year:0000}{group.Month:00}{group.Day:00}{group.Hour:00}{group.Minute:00}.{_extension}");
+					case PeriodicityOptions.Hourly:
+						return Path.Combine(_path, $"{_fileName}-{group.Year:0000}{group.Month:00}{group.Day:00}{group.Hour:00}.{_extension}");
+					case PeriodicityOptions.Daily:
+						return Path.Combine(_path, $"{_fileName}-{group.Year:0000}{group.Month:00}{group.Day:00}.{_extension}");
+					case PeriodicityOptions.Monthly:
+						return Path.Combine(_path, $"{_fileName}-{group.Year:0000}{group.Month:00}.{_extension}");
+				}
+			}
+
+
 			throw new InvalidDataException("Invalid periodicity");
 		}
 
@@ -93,14 +116,19 @@ namespace Domain.Tenants.Logging
 		{
 			if (_maxRetainedFiles > 0)
 			{
-				var files = new DirectoryInfo(_path)
-					.GetFiles(_fileName + "*")
-					.OrderByDescending(f => f.Name)
-					.Skip(_maxRetainedFiles.Value);
+				var directories = Directory.EnumerateDirectories(_path);
 
-				foreach (var item in files)
+				foreach (var directory in directories)
 				{
-					item.Delete();
+					var files = new DirectoryInfo(directory)
+						.GetFiles(_fileName + "*")
+						.OrderByDescending(f => f.Name)
+						.Skip(_maxRetainedFiles.Value);
+
+					foreach (var item in files)
+					{
+						item.Delete();
+					}
 				}
 			}
 		}
